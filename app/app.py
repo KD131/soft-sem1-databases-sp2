@@ -29,7 +29,10 @@ def main():
             break
         else:
             games = game_recommendations(gds, game_title)
-            print(games)
+            if len(games) == 0:
+                print(f"No recommendations for {game_title}")
+            else:
+                print(games)
     gds.close()
 
 if __name__ == "__main__":
