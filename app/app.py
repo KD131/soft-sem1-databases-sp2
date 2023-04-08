@@ -5,12 +5,12 @@ from modules.secrets import NEO4J_AUTH, NEO4J_URI
 
 def game_recommendations(gds: GraphDataScience, game_title: str, limit: int=10) -> pd.DataFrame:
     """Recommend games similar to the given game title."""
-    return gds.run_cypher(
+    games = gds.run_cypher(
         """
         match (s:Game {title: $title})<-[:PLAY]-(u:User)-[:PLAY]->(t:Game)
         where (s)-->(:Genre)<--(t)
-        return t.title as title, count(*) as cnt
-        order by cnt desc
+        return t.title as Title, count(*) as Count
+        order by Count desc
         limit $limit
         """,
         params={
@@ -19,6 +19,9 @@ def game_recommendations(gds: GraphDataScience, game_title: str, limit: int=10) 
         },
         database='neo4j'
     )
+    # Index from 1. Could also use RangeIndex or normal range.
+    games.index += 1
+    return games
 
 def main():
     gds = GraphDataScience(NEO4J_URI, NEO4J_AUTH, database='neo4j')
