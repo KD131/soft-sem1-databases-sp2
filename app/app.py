@@ -55,6 +55,7 @@ def game_recommendation_menu(gds: GraphDataScience):
                 print(f"No recommendations for {game_title}")
             else:
                 print(games)
+        # TODO: select new game to get recommendations for by index
 
 def main():
     gds = GraphDataScience(NEO4J_URI, NEO4J_AUTH, database='neo4j')
@@ -73,6 +74,7 @@ def main():
             game_recommendation_menu(gds)
         elif command == '2':
             if G is None:
+                # Singleton. If graph was made, but application restarted, get from Catalog.
                 try:
                     G = gds.graph.get('games')
                 except:
